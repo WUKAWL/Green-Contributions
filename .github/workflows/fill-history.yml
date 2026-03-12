@@ -1,4 +1,4 @@
-name: Fill History
+name: Fill History (Deep Green)
 
 on:
   workflow_dispatch:
@@ -11,6 +11,10 @@ on:
         description: '结束日期 (YYYY-MM-DD) - 留空则默认为今天'
         required: false
         default: ''
+      daily_commits:
+        description: '每天提交次数'
+        required: true
+        default: '10'
 
 jobs:
   fill:
@@ -27,18 +31,20 @@ jobs:
         env:
           START: ${{ github.event.inputs.start_date }}
           END: ${{ github.event.inputs.end_date }}
+          DAILY_COUNT: ${{ github.event.inputs.daily_commits }}
         run: |
           if [ -z "$END" ]; then
             END=$(date +%Y-%m-%d)
           fi
-          # 使用循环生成从 START 到 END 的每一天（不包含 END，可根据需要调整）
-          current="$START"
-          while [ "$current" != "$END" ]; do
-            echo "Generating commit for $current"
-            export GIT_AUTHOR_DATE="$current 12:00:00"
-            export GIT_COMMITTER_DATE="$current 12:00:00"
-            git commit --allow-empty -m "chore: sync on $current"
-            current=$(date -d "$current + 1 day" +%Y-%m-%d)
+          current_date="$START"
+          while [ "$current_date" != "$END" ]; do
+            echo "Generating $DAILY_COUNT commits for $current_date"
+            for i in $(seq 1 $DAILY_COUNT); do
+              export GIT_AUTHOR_DATE="$current_date 12:00:00"
+              export GIT_COMMITTER_DATE="$current_date 12:00:00"
+              git commit --allow-empty -m "chore: sync #$i on $current_date"
+            done
+            current_date=$(date -d "$current_date + 1 day" +%Y-%m-%d)
           done
       - name: Push commits
         run: git push --force origin HEAD

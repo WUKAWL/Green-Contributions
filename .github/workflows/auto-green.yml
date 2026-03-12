@@ -1,0 +1,21 @@
+name: Auto Green
+
+on:
+  schedule:
+    # 每天 UTC 20:00 运行（即北京时间次日 4:00）
+    - cron: '0 20 * * *'
+  workflow_dispatch:        # 允许手动触发
+
+jobs:
+  auto-green:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make empty commit
+        run: |
+          git config --global user.email "oxxxxlin@gmail.com"
+          git config --global user.name "oxxxxlin"
+          git commit --allow-empty -m "Auto commit on $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+          git push

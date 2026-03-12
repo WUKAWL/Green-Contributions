@@ -2,9 +2,9 @@ name: Auto Green
 
 on:
   schedule:
-    # 每天 UTC 20:00 运行（即北京时间次日 4:00）
+    # 每天 UTC 20:00 运行（北京时间次日 4:00）
     - cron: '0 20 * * *'
-  workflow_dispatch:        # 允许手动触发
+  workflow_dispatch:
 
 jobs:
   auto-green:
@@ -13,9 +13,15 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Make empty commit
+      - name: Configure Git
         run: |
           git config --global user.email "oxxxxlin@gmail.com"
           git config --global user.name "oxxxxlin"
-          git commit --allow-empty -m "Auto commit on $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+      - name: Make multiple empty commits
+        env:
+          COMMIT_COUNT: 10   # 每天生成的提交次数，可改为 5-20
+        run: |
+          for i in $(seq 1 $COMMIT_COUNT); do
+            git commit --allow-empty -m "Auto commit #$i on $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+          done
           git push

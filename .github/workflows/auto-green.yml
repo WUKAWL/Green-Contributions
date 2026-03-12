@@ -21,7 +21,7 @@ jobs:
 
       - name: Make multiple empty commits
         env:
-          COMMIT_COUNT: 100   # 每天提交次数（≥6 次即为深绿色）
+          COMMIT_COUNT: 12   # 每天提交次数（≥6 次即为深绿色）
         run: |
           for i in $(seq 1 $COMMIT_COUNT); do
             git commit --allow-empty -m "Auto commit #$i on $(date -u '+%Y-%m-%dT%H:%M:%SZ')"

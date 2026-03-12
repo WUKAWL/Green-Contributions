@@ -23,19 +23,23 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+
       - name: Configure Git
         run: |
           git config --global user.email "oxxxxlin@gmail.com"
           git config --global user.name "oxxxxlin"
+
       - name: Generate historical commits
         env:
           START: ${{ github.event.inputs.start_date }}
           END: ${{ github.event.inputs.end_date }}
           DAILY_COUNT: ${{ github.event.inputs.daily_commits }}
         run: |
+          # 如果结束日期为空，则默认今天
           if [ -z "$END" ]; then
-            END=$(date +%Y-%m-%d)
+            END=$(date +%Y-%m-%d)   # 改为今天
           fi
+
           current_date="$START"
           while [ "$current_date" != "$END" ]; do
             echo "Generating $DAILY_COUNT commits for $current_date"
@@ -46,5 +50,6 @@ jobs:
             done
             current_date=$(date -d "$current_date + 1 day" +%Y-%m-%d)
           done
+
       - name: Push commits
         run: git push --force origin HEAD

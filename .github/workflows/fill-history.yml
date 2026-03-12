@@ -39,4 +39,4 @@ jobs:
             current_date=$(date -d "$current_date + 1 day" +%Y-%m-%d)
           done
       - name: Push commits
-        run: git push origin HEAD
+        run: git push --force origin HEAD   # 强制推送，覆盖远程历史

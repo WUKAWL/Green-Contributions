@@ -1,4 +1,4 @@
-# 🌱 green-contributions
+# 🌱 Green-Contributions
 
 这是一个通过 GitHub Actions 自动生成提交记录的仓库，旨在帮助你保持 GitHub 贡献图的活跃度。只需配置一次，即可实现：
 

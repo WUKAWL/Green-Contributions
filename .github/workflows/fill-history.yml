@@ -29,8 +29,8 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --global user.email "oxxxxlin@gmail.com"
-          git config --global user.name "oxxxxlin"
+          git config --global user.email "21525471@qq.com"
+          git config --global user.name "WUKAWL"
 
       - name: Generate commits
         env:
@@ -42,7 +42,7 @@ jobs:
           if [ "${{ github.event_name }}" == "schedule" ]; then
             # 定时触发：生成今天提交
             TODAY=$(date +%Y-%m-%d)
-            COMMITS_PER_DAY=12   # 每天提交次数，可按需修改
+            COMMITS_PER_DAY=30   # 每天提交次数，可按需修改
             echo "Daily run: generating $COMMITS_PER_DAY commits for $TODAY"
             for i in $(seq 1 $COMMITS_PER_DAY); do
               git commit --allow-empty -m "daily fill #$i on $TODAY"
